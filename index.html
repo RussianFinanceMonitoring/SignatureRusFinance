@@ -2,110 +2,180 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Протокол проверки ЭЦП</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
-      font-family: 'Segoe UI', Roboto, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: #f2f6fb;
       margin: 0;
       padding: 0;
     }
+
     header {
       background-color: #003366;
       color: white;
-      padding: 15px 10px;
-      text-align: center;
-      font-size: 20px;
-      font-weight: bold;
-    }
-    .container {
-      max-width: 95%;
-      margin: 20px auto;
-      background: white;
       padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+      text-align: center;
     }
+
+    .container {
+      max-width: 800px;
+      margin: 30px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      position: relative;
+      z-index: 2;
+      transition: background-color 0.4s ease;
+    }
+
+    .container.dimmed {
+      background-color: rgba(255,255,255,0.7);
+    }
+
     .status-box {
       background: #e6f7e6;
       border: 1px solid #91d591;
-      padding: 15px;
-      border-radius: 6px;
+      padding: 10px 20px;
+      border-radius: 5px;
       color: #2d702d;
       font-size: 16px;
       margin-bottom: 20px;
-      text-align: center;
     }
+
     .details {
-      display: none;
-      margin-top: 20px;
-      font-size: 15px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.6s ease, opacity 0.4s ease;
+      opacity: 0;
     }
-    .details dt {
-      font-weight: bold;
-      margin-top: 12px;
+
+    .details.open {
+      max-height: 2000px;
+      opacity: 1;
     }
-    .details dd {
-      margin: 5px 0 10px 0;
+
+    .details dt, .details dd {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
     }
-    button {
-      padding: 12px 20px;
-      font-size: 16px;
+
+    .details.open dt, .details.open dd {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .details.open dt:nth-child(1),
+    .details.open dd:nth-child(2) { transition-delay: 0.1s; }
+    .details.open dt:nth-child(3),
+    .details.open dd:nth-child(4) { transition-delay: 0.2s; }
+    .details.open dt:nth-child(5),
+    .details.open dd:nth-child(6) { transition-delay: 0.3s; }
+    .details.open dt:nth-child(7),
+    .details.open dd:nth-child(8) { transition-delay: 0.4s; }
+    .details.open dt:nth-child(9),
+    .details.open dd:nth-child(10) { transition-delay: 0.5s; }
+    .details.open dt:nth-child(11),
+    .details.open dd:nth-child(12) { transition-delay: 0.6s; }
+
+    .toggle-btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 10px 15px;
+      font-size: 14px;
       background-color: #003366;
       color: white;
       border: none;
-      border-radius: 6px;
+      border-radius: 5px;
       cursor: pointer;
-      width: 100%;
+      margin-bottom: 10px;
+      transition: background-color 0.3s;
     }
-    button:hover {
+
+    .toggle-btn:hover {
       background-color: #0055aa;
+    }
+
+    .arrow {
+      margin-left: 8px;
+      display: inline-block;
+      transition: transform 0.4s ease;
+    }
+
+    .arrow.open {
+      transform: rotate(180deg);
+    }
+
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0, 0, 0, 0.3);
+      z-index: 1;
+    }
+
+    .overlay.active {
+      display: block;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+        margin: 15px;
+      }
+
+      .toggle-btn {
+        width: 100%;
+        justify-content: center;
+      }
     }
   </style>
 </head>
 <body>
 
 <header>
-  РОСФИНМОНИТОРИНГ
+  <span style="font-size: 24px;">РОСФИНМОНИТОРИНГ</span>
 </header>
 
-<div class="container">
+<div class="overlay" id="overlay" onclick="toggleDetails()"></div>
+
+<div class="container" id="mainContainer">
   <div class="status-box">
-    ✅ Электронная подпись действительна — подлинность документа подтверждена.
+    ✅ Электронная подпись действительна — Подлинность документа подтверждена
   </div>
 
-  <button onclick="toggleDetails()" aria-expanded="false" aria-controls="detailsBlock">
+  <button class="toggle-btn" onclick="toggleDetails()">
     Показать / Скрыть детали
+    <span id="arrowIcon" class="arrow">▼</span>
   </button>
 
   <dl class="details" id="detailsBlock">
     <dt>Статус подписи:</dt>
-    <dd>Действительна</dd>
+    <dd>ДЕЙСТВИТЕЛЬНА</dd>
 
     <dt>Статус сертификата подписи:</dt>
-    <dd>Действителен</dd>
+    <dd>ДЕЙСТВИТЕЛЕН</dd>
 
     <dt>Владелец сертификата:</dt>
-    <dd>
-      Чихачин Ю.А., О = Росфинмониторинг<br>
-      Email: <a href="mailto:cfo@fedsfm.ru">cfo@fedsfm.ru</a><br>
+    <dd>Чихачин Ю.А., О=Росфинмониторинг<br>
+      Email: cfo@fedsfm.ru<br>
       Адрес: г. Москва, ул. Мясницкая, д. 39, корп. 1<br>
-      ИНН: 7708234633, ОГРН: 1047708022548
-    </dd>
+      ИНН: 7708234633, ОГРН: 1047708022548</dd>
 
     <dt>Издатель сертификата:</dt>
-    <dd>
-      ФНС России<br>
-      Email: <a href="mailto:info@mon.gov.ru">info@mon.gov.ru</a><br>
+    <dd>ФНС России<br>
+      Email: info@mon.gov.ru<br>
       Адрес: г. Москва, ул. Неглинная, д. 23<br>
-      ИНН: 7707329152, ОГРН: 1047707030513
-    </dd>
+      ИНН: 7707329152, ОГРН: 1047707030513</dd>
 
     <dt>Серийный номер:</dt>
     <dd>107115907886917328010848942387642132461</dd>
 
-    <dt>Срок действия:</dt>
+    <dt>Действителен:</dt>
     <dd>с 01.01.2025 по 31.12.2025</dd>
   </dl>
 </div>
@@ -113,9 +183,14 @@
 <script>
   function toggleDetails() {
     const block = document.getElementById('detailsBlock');
-    const isVisible = block.style.display === 'block';
-    block.style.display = isVisible ? 'none' : 'block';
-    event.target.setAttribute('aria-expanded', !isVisible);
+    const arrow = document.getElementById('arrowIcon');
+    const overlay = document.getElementById('overlay');
+    const container = document.getElementById('mainContainer');
+
+    block.classList.toggle('open');
+    arrow.classList.toggle('open');
+    overlay.classList.toggle('active');
+    container.classList.toggle('dimmed');
   }
 </script>
 
