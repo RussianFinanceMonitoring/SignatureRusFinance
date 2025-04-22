@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Протокол проверки ЭЦП</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Roboto, sans-serif;
+      background: #f2f6fb;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #003366;
+      color: white;
+      padding: 15px 10px;
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .container {
+      max-width: 95%;
+      margin: 20px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    }
+    .status-box {
+      background: #e6f7e6;
+      border: 1px solid #91d591;
+      padding: 15px;
+      border-radius: 6px;
+      color: #2d702d;
+      font-size: 16px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .details {
+      display: none;
+      margin-top: 20px;
+      font-size: 15px;
+    }
+    .details dt {
+      font-weight: bold;
+      margin-top: 12px;
+    }
+    .details dd {
+      margin: 5px 0 10px 0;
+    }
+    button {
+      padding: 12px 20px;
+      font-size: 16px;
+      background-color: #003366;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #0055aa;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  РОСФИНМОНИТОРИНГ
+</header>
+
+<div class="container">
+  <div class="status-box">
+    ✅ Электронная подпись действительна — подлинность документа подтверждена.
+  </div>
+
+  <button onclick="toggleDetails()" aria-expanded="false" aria-controls="detailsBlock">
+    Показать / Скрыть детали
+  </button>
+
+  <dl class="details" id="detailsBlock">
+    <dt>Статус подписи:</dt>
+    <dd>Действительна</dd>
+
+    <dt>Статус сертификата подписи:</dt>
+    <dd>Действителен</dd>
+
+    <dt>Владелец сертификата:</dt>
+    <dd>
+      Чихачин Ю.А., О = Росфинмониторинг<br>
+      Email: <a href="mailto:cfo@fedsfm.ru">cfo@fedsfm.ru</a><br>
+      Адрес: г. Москва, ул. Мясницкая, д. 39, корп. 1<br>
+      ИНН: 7708234633, ОГРН: 1047708022548
+    </dd>
+
+    <dt>Издатель сертификата:</dt>
+    <dd>
+      ФНС России<br>
+      Email: <a href="mailto:info@mon.gov.ru">info@mon.gov.ru</a><br>
+      Адрес: г. Москва, ул. Неглинная, д. 23<br>
+      ИНН: 7707329152, ОГРН: 1047707030513
+    </dd>
+
+    <dt>Серийный номер:</dt>
+    <dd>107115907886917328010848942387642132461</dd>
+
+    <dt>Срок действия:</dt>
+    <dd>с 01.01.2025 по 31.12.2025</dd>
+  </dl>
+</div>
+
+<script>
+  function toggleDetails() {
+    const block = document.getElementById('detailsBlock');
+    const isVisible = block.style.display === 'block';
+    block.style.display = isVisible ? 'none' : 'block';
+    event.target.setAttribute('aria-expanded', !isVisible);
+  }
+</script>
+
+</body>
+</html>
